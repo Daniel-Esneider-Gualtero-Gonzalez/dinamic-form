@@ -1,10 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ShippingInformation from "./ShippingInformation";
 import PaymentIu from "./PaymentIu";
 
 function FormDinamic() {
   const [isPreviu,setIsPreviu] = useState(false)
   const refformPayout = useRef();
+  const cantSections = 2
+  const [isFinished,setIsFinished] = useState(false)
   const submitDinamicForm = (e) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
@@ -12,6 +14,39 @@ function FormDinamic() {
       console.log("value ", value, key);
     });
   };
+
+  
+
+  const previuSection = ()=>{
+    if ( refformPayout.current.scrollLeft > refformPayout.current.scrollLeft / cantSections) {
+      
+      const PREVIUSECTION = refformPayout.current.scrollLeft - refformPayout.current.scrollWidth / cantSections
+      refformPayout.current.scrollTo({ left: PREVIUSECTION , behavior: "smooth",});
+
+      // verificamos  si despues de realizar el previu hay mas previus
+      if(PREVIUSECTION <= refformPayout.current.clientWidth){
+        setIsPreviu(false)
+      }
+    }
+
+  }
+
+  const nextSection = ()=>{
+    setIsPreviu(true)
+    const newSection =  refformPayout.current.scrollLeft + refformPayout.current.scrollWidth / cantSections
+    refformPayout.current.scrollTo({left: newSection , behavior: "smooth", });
+
+    console.log("scroll left" , refformPayout.current.scrollWidth - newSection)
+    setTimeout(()=> console.log("scroll wi"),2000)
+  }
+
+  useEffect(()=> {
+
+    window.addEventListener('resize',(e)=>{
+     
+      refformPayout.current.scrollTo({left: refformPayout.current.clientWidth * section, behavior:'auto'})
+    })
+  },[])
 
   return (
     <div className="contentForm px-2 py-2 border border-red-600">
@@ -32,49 +67,16 @@ function FormDinamic() {
       <div className="flex justify-center mt-3">
 
         {refformPayout.current && isPreviu  ? 
-        <button
-          onClick={() => {
-            if (
-              refformPayout.current.scrollLeft >
-              refformPayout.current.clientWidth
-            ) {
-              refformPayout.current.scrollTo({
-                left:
-                  refformPayout.current.scrollLeft -
-                  refformPayout.current.scrollWidth / 2,
-                behavior: "smooth",
-              });
-            }
-            // toca aqui tambien calcular lo que le quitamos ya que con scrollTo , no cambia de una vez el valor del scroll
-            if(refformPayout.current.scrollLeft -
-              refformPayout.current.scrollWidth / 2 <= refformPayout.current.clientWidth){
-              setIsPreviu(false)
-            }
-          }}
-          className="border border-black py-2 px-2 hover:bg-green-600"
-        >
+        <button onClick={previuSection} className="border border-black py-2 px-2 hover:bg-green-600" >
           Anterior
         </button> : null}
 
-        <button
-          className="border border-black  py-2 px-2 hover:bg-green-600"
-          onClick={() => {
-            setIsPreviu(true)
-            console.log(
-              "scoll del formdinamic",
-              refformPayout.current.scrollWidth / 2
-            );
-            refformPayout.current.scrollTo({
-              left:
-                refformPayout.current.scrollLeft +
-                refformPayout.current.scrollWidth / 2,
-              behavior: "smooth",
-            });
-          }}
-        >
+        {isFinished ?  <button>Enviar</button> : <button onClick={nextSection} className="border border-black  py-2 px-2 hover:bg-green-600">
           Siguiente
-        </button>
+        </button>}
       </div>
+
+      
     </div>
   );
 }
