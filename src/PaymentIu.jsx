@@ -3,7 +3,7 @@ import React from 'react'
 function PaymentIu() {
   return (
     <>
-      <div>
+      <div className='w-[400px] border border-blue-400'>
 
         <div className='mt-2'>
           <input className='mx-1' type="radio" name="metodPago" id="creditcard" /> <label htmlFor="creditcard">CreditCard</label>
