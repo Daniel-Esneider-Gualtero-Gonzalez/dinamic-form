@@ -43,8 +43,9 @@ function FormDinamic() {
   useEffect(()=> {
 
     window.addEventListener('resize',(e)=>{
-     
-      refformPayout.current.scrollTo({left: refformPayout.current.clientWidth * section, behavior:'auto'})
+      
+      // Controlar el scroll cuando hacen resize, ya que se ve la 2 section
+      refformPayout.current.scrollTo({left: (refformPayout.current.scrollWidth / cantSections ) + refformPayout.current.scrollLeft, behavior:'auto'})
     })
   },[])
 
