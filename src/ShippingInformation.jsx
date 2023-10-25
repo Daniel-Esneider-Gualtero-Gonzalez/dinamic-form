@@ -1,6 +1,10 @@
-
+import useForm from "./useForm"
 
 function ShippingInformation() {
+
+    const {errors,register ,registerError} = useForm()
+
+
     return (
         <>
             <div className="">
@@ -11,14 +15,20 @@ function ShippingInformation() {
                     <div className="mt-1 mx-1">
                         <label className="w-full" htmlFor="firstname">First Name</label>
                         <div className="mt-1">
-                            <input  name="firstname" className="h-[35px] w-full border border-black rounded" type="text" />
+                            <input onBlur={(e)=>{
+                                console.log("name input event", e.target.name)
+                                if(e.target.value.includes(".")){
+                                    registerError(e.target.name,"puntos")
+                                    }
+                            }} {...register('firstname')} name="firstname" className="h-[35px] w-full border border-black rounded" type="text" />
+                            { errors.firsname?.puntos ? <span>Error</span> : null}
                         </div>
                     </div>
 
                     <div className="mt-1 mx-1">
                         <label htmlFor="lastname">Last Name</label>
                         <div className="mt-1">
-                            <input name="lastname" className="h-[35px] w-full border border-black rounded" type="text" />
+                            <input {...register('lastname')} name="lastname" className="h-[35px] w-full border border-black rounded" type="text" />
                         </div>
                     </div>
                 </div>

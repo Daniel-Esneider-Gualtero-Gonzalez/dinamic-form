@@ -5,7 +5,8 @@ import PaymentIu from "./PaymentIu";
 function FormDinamic() {
   const [isPreviu,setIsPreviu] = useState(false)
   const refformPayout = useRef();
-  const cantSections = 2
+  // importante actualizar si desea agregar otra seccion
+  const cantSections = 3
   const [isFinished,setIsFinished] = useState(false)
   const submitDinamicForm = (e) => {
     e.preventDefault();
@@ -36,8 +37,7 @@ function FormDinamic() {
     const newSection =  refformPayout.current.scrollLeft + refformPayout.current.scrollWidth / cantSections
     refformPayout.current.scrollTo({left: newSection , behavior: "smooth", });
 
-    console.log("scroll left" , refformPayout.current.scrollWidth - newSection)
-    setTimeout(()=> console.log("scroll wi"),2000)
+    
   }
 
   useEffect(()=> {
@@ -62,6 +62,9 @@ function FormDinamic() {
         </div>
         <div className="justify-center flex border py-2 px-2 border-black  mx-1 w-full flex-0 flex-shrink-0 flex-auto">
           <PaymentIu />
+        </div>
+        <div className="justify-center flex border py-2 px-2 border-black  mx-1 w-full flex-0 flex-shrink-0 flex-auto">
+          tercera seccion
         </div>
       </form>
 
