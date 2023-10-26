@@ -1,19 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import ShippingInformation from "./ShippingInformation";
 import PaymentIu from "./PaymentIu";
+import useForm from "./useForm";
 
 function FormDinamic() {
   const [isPreviu,setIsPreviu] = useState(false)
+  const {handleSubmitForm} = useForm()
   const refformPayout = useRef();
   // importante actualizar si desea agregar otra seccion
   const cantSections = 3
   const [isFinished,setIsFinished] = useState(false)
-  const submitDinamicForm = (e) => {
-    e.preventDefault();
-    const form = new FormData(e.currentTarget);
-    form.forEach((value, key) => {
-      console.log("value ", value, key);
-    });
+  const onSubmit = (e) => {
+    console.log("evente form" , e)
+    e.preventDefault()
+    const data = handleSubmitForm(e)
   };
 
   
@@ -53,7 +53,7 @@ function FormDinamic() {
     <div className="contentForm px-2 py-2 border border-red-600">
       <form
         ref={refformPayout}
-        onSubmit={submitDinamicForm}
+        onSubmit={onSubmit}
         id="formDinamic"
         className="border border-yellow-500  py-1 flex overflow-hidden"
       >
@@ -75,9 +75,11 @@ function FormDinamic() {
           Anterior
         </button> : null}
 
-        {isFinished ?  <button>Enviar</button> : <button onClick={nextSection} className="border border-black  py-2 px-2 hover:bg-green-600">
+        {isFinished ?  "": <button onClick={nextSection} className="border border-black  py-2 px-2 hover:bg-green-600">
           Siguiente
         </button>}
+
+        <button onClick={()=> refformPayout.current.submit()}>Enviar</button> 
       </div>
 
       

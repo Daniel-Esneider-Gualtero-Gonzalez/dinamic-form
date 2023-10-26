@@ -1,8 +1,11 @@
 import useForm from "./useForm"
+import AlertMessage from "./components/AlertMessage"
 
 function ShippingInformation() {
 
-    const {errors,register ,registerError} = useForm()
+    const {errors,register ,registerError,cleanError} = useForm()
+
+   
 
 
     return (
@@ -18,10 +21,20 @@ function ShippingInformation() {
                             <input onBlur={(e)=>{
                                 console.log("name input event", e.target.name)
                                 if(e.target.value.includes(".")){
+                                    // console.log("incluye un error de puntos")
                                     registerError(e.target.name,"puntos")
+                                    }else{
+                                        cleanError(e.target.name,"puntos")
                                     }
+                                
+                                    if(e.target.value.includes("a")) {
+                                        // console.log("incluye un error de otroerror")
+                                        registerError(e.target.name, "otroerror")
+                                    } else cleanError(e.target.name,"otroerror")
+                                    
                             }} {...register('firstname')} name="firstname" className="h-[35px] w-full border border-black rounded" type="text" />
-                            { errors.firsname?.puntos ? <span>Error</span> : null}
+                            {errors.firstname?.puntos ? <AlertMessage textMessage={"Error de puntos"} />: null}
+                            {errors.firstname?.otroerror ? <AlertMessage textMessage={"Otro error"} />: null}
                         </div>
                     </div>
 

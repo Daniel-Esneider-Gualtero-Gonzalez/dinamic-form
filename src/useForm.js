@@ -1,49 +1,84 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 
 function useForm() {
 
-    const [errors,setErrors] = useState({})
-    const  inputsRegisters = useRef([])
+    // TENER UNA FUNCION QUE ELIMINE EL ERROR , CUANDO PASE LAS VALIDACIONES
 
-    const  register =  (inputname)=>{
-        if(inputsRegisters.current.includes(inputname)) return console.log("El input name ya se encuentra registrado")
+    const [errors, setErrors] = useState({})
+    const inputsRegisters = useRef([])
+
+    const register = (inputname) => {
+        if (inputsRegisters.current.includes(inputname)) return //console.log("El input name ya se encuentra registrado")
 
         inputsRegisters.current.push(inputname)
 
-        console.log("input registrado" ,inputname)
-      
     }
 
     //  registra los errores de un input en errors
-    const registerError = (inputName,errorName) =>{
+    const registerError = (inputName, errorName) => {
 
-       
-        console.log("input registrados cuando se ejecuta el register error", inputsRegisters)
-        console.log("register errorr", typeof inputName ,errorName)
-        if(!inputsRegisters.current.includes(inputName)) return console.log("No puede registrar un error a un input que no ha registrado")
+        if (!inputsRegisters.current.includes(inputName)) return console.log("No puede registrar un error a un input que no ha registrado")
 
-        // SOLUCIONAR QUE EN EL ESTADO DE ERROR SEA ESTA ESTRUCTURA {INPUTNAME: {nameError: true} }
-        { errorName}
-        const inputNametoError = `${inputName}`
-        errors[inputName] = errorName
-
-        setErrors(e=> {
-
-            const newErrors = {...e}
-            newErrors[inputNametoError] = {errorName : true}
-            return  newErrors
-        })
+        setErrors((prevErrors) => {
+            const updatedErrors = { ...prevErrors };
         
+            if (!updatedErrors[inputName]) {
+              updatedErrors[inputName] = {};
+            }
+        
+            if (errorName in updatedErrors[inputName]) {
+              console.log("El error ya se encuentra registrado", errorName);
+              return prevErrors;
+            } else {
+              updatedErrors[inputName] = {
+                ...updatedErrors[inputName],
+                [errorName]: true,
+              };
+              return updatedErrors;
+            }
+          });
 
-       setTimeout(()=>{
-        console.log("errors despues de registrar un error", errors)
-       },3000)
     }
 
+    // function que limpia los errores. Si  la validacion que hagan pasa y si existe ese posible error
+    const cleanError = (inputName,errorName) =>{
+       
+        if(inputName in errors){
+            
+            const errorsInput = errors[inputName]
+
+            if(errorName in errorsInput && errorName in errorsInput !== undefined ){
+                console.log("el error",errorName , " se encuentra en errors de ese input")
+                delete errorsInput[errorName]
+                setErrors(e=>{
+                    return {...e, [inputName]: errorsInput}
+                })
+            }else{
+                return console.log("el error no se encuentra en ese input")
+            }
+
+        }else{
+            return
+        }
+    }
+
+    // PENEIENTE DE TERMINAR
+    const handleSubmitForm = (e) =>{
+
+        // e.preventDefault(
+        const form = new FormData()
+
+        console.log("handle submit form", e)
+    }
+
+    useEffect(() => console.log("errors", errors), [errors])
 
 
-    return { errors,register , registerError}
+
+
+
+    return { errors, register, registerError ,cleanError , handleSubmitForm}
 
 }
 
