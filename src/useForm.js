@@ -66,10 +66,19 @@ function useForm() {
     // PENEIENTE DE TERMINAR
     const handleSubmitForm = (e) =>{
 
-        // e.preventDefault(
-        const form = new FormData()
+        const data = { }
+        let form = new FormData(e.target)
+        
 
-        console.log("handle submit form", e)
+        for (let i = 0; i < inputsRegisters.current.length; i++) {
+            
+            const inputName = inputsRegisters.current[i]
+            const valueInput = form.get(inputName)
+            data[inputName] = valueInput
+            
+        }
+
+        return data
     }
 
     useEffect(() => console.log("errors", errors), [errors])

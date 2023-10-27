@@ -1,9 +1,7 @@
 import useForm from "./useForm"
 import AlertMessage from "./components/AlertMessage"
 
-function ShippingInformation() {
-
-    const {errors,register ,registerError,cleanError} = useForm()
+function ShippingInformation({errors,register ,registerError,cleanError} ) {
 
    
 
@@ -48,7 +46,7 @@ function ShippingInformation() {
 
                 <label htmlFor="adress" className="w-full mt-1 flex">Adress</label>
                 <div className="mt-1">
-                    <input name="addres" className="h-[35px] w-full border border-black rounded" type="text" />
+                    <input required name="addres" className="h-[35px] w-full border border-black rounded" type="text" />
                 </div>
 
                 <div className="mt-1 border border-blue-600 sm:flex">
